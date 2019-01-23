@@ -1,5 +1,7 @@
 # kubeconfig-picker
 
+[![wercker status][wercker-image]][wercker-url]
+
 Pick out a subset of Kube config contexts
 
 ## Usage
@@ -23,3 +25,6 @@ func main() {
     fmt.Printf("%v\n", string(config))
 }
 ```
+
+[wercker-image]: https://app.wercker.com/status/b97a9ce6c5baee376f4d54ceed0b7c98/s/master
+[wercker-url]: https://app.wercker.com/project/byKey/b97a9ce6c5baee376f4d54ceed0b7c98
