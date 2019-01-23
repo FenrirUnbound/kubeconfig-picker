@@ -9,18 +9,30 @@ import (
 )
 
 func TestNewKonfig(t *testing.T) {
+	kubeconfig, err := ioutil.ReadFile("./test_files/valid_file.yaml")
+	if err != nil {
+		assert.Fail(t, err.Error())
+	}
+
+	cfg, err := konfig.NewKonfig(kubeconfig)
+	assert.Nil(t, err)
+	assert.NotNil(t, cfg)
+	assert.Equal(t, cfg.ListContexts(), []string{"myContextName"})
+}
+
+func TestNewKonfigFromFile(t *testing.T) {
 	testFilepath := "./test_files/valid_file.yaml"
 
-	cfg, err := konfig.NewKonfig(testFilepath)
+	cfg, err := konfig.NewKonfigFromFile(testFilepath)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, cfg)
 }
 
-func TestNewConfigNonexistingConfig(t *testing.T) {
+func TestNewConfigFromFileNonexistingConfig(t *testing.T) {
 	fakeFilepath := "./no_file_here.yaml"
 
-	cfg, err := konfig.NewKonfig(fakeFilepath)
+	cfg, err := konfig.NewKonfigFromFile(fakeFilepath)
 
 	assert.NotNil(t, err)
 	assert.Nil(t, cfg)
@@ -28,7 +40,7 @@ func TestNewConfigNonexistingConfig(t *testing.T) {
 
 func TestListContexts(t *testing.T) {
 	testFilepath := "./test_files/valid_file.yaml"
-	cfg, _ := konfig.NewKonfig(testFilepath)
+	cfg, _ := konfig.NewKonfigFromFile(testFilepath)
 
 	contexts := cfg.ListContexts()
 
@@ -37,7 +49,7 @@ func TestListContexts(t *testing.T) {
 
 func TestPickContexts(t *testing.T) {
 	testFilepath := "./test_files/bigger_file.yaml"
-	cfg, _ := konfig.NewKonfig(testFilepath)
+	cfg, _ := konfig.NewKonfigFromFile(testFilepath)
 
 	slimmerConfig := cfg.SelectContexts([]string{"lastContextName"})
 	assert.NotNil(t, slimmerConfig)
@@ -50,7 +62,7 @@ func TestPickContexts(t *testing.T) {
 
 func TestPickNonexistingContext(t *testing.T) {
 	testFilepath := "./test_files/bigger_file.yaml"
-	cfg, _ := konfig.NewKonfig(testFilepath)
+	cfg, _ := konfig.NewKonfigFromFile(testFilepath)
 
 	slimmerConfig := cfg.SelectContexts([]string{"thisContextCannotExist"})
 	assert.NotNil(t, slimmerConfig)
@@ -59,7 +71,7 @@ func TestPickNonexistingContext(t *testing.T) {
 
 func TestPickContextsAsYaml(t *testing.T) {
 	testFilepath := "./test_files/bigger_file.yaml"
-	cfg, _ := konfig.NewKonfig(testFilepath)
+	cfg, _ := konfig.NewKonfigFromFile(testFilepath)
 
 	slimmerConfig, err := cfg.SelectContextsAsYaml([]string{"lastContextName"})
 	assert.Nil(t, err)

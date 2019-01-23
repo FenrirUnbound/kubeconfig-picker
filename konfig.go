@@ -61,9 +61,23 @@ func (k *Konfig) SelectContextsAsYaml(contextNames []string) ([]byte, error) {
 	return data, err
 }
 
-// NewKonfig Generate a Konfig object that wraps a kube config with the ability
-// to create subset configurations.
-func NewKonfig(kubeConfigFilepath string) (*Konfig, error) {
+// NewKonfig Generate a Konfig object from a kubeconfig file that is already
+// in a byte-array
+func NewKonfig(kubeconfig []byte) (*Konfig, error) {
+	config, err := clientcmd.Load(kubeconfig)
+	if err != nil {
+		return nil, err
+	}
+
+	result := &Konfig{
+		kubeconfig: config,
+	}
+
+	return result, nil
+}
+
+// NewKonfigFromFile Generate a Konfig object by loading a kubeconfig file
+func NewKonfigFromFile(kubeConfigFilepath string) (*Konfig, error) {
 	absPath, _ := filepath.Abs(kubeConfigFilepath)
 
 	config, err := clientcmd.LoadFromFile(absPath)
