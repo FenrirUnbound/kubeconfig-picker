@@ -1,0 +1,21 @@
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: ZHVtbXlEYXRh
+    server: serverEndpoint
+  name: myClusterName
+contexts:
+- context:
+    cluster: myClusterName
+    namespace: namespace
+    user: someUser
+  name: myContextName
+current-context: myContextName
+kind: Config
+preferences: {}
+users:
+- name: someUser
+  user:
+    client-certificate-data: ZHVtbXlEYXRh
+    client-key-data: ZHVtbXlEYXRh
+
