@@ -5,12 +5,6 @@ build:
   steps:
     - wercker/setup-go-workspace:
         package-dir: github.com/fenrirunbound/kubeconfig-picker
-    - script:
-        name: install go tools
-        code: |
-          go version
-          go get -u -v github.com/golang/dep
-          go get -u -v github.com/golang/dep/cmd/dep
     - wercker/golint
     - wercker/dep
     - script:
@@ -21,4 +15,14 @@ build:
         name: go build
         code: |
           go build ./...
+
+deploy:
+  steps:
+    - wercker/setup-go-workspace:
+        package-dir: github.com/fenrirunbound/kubeconfig-picker
+    - wercker/dep
+    - script:
+        name: goreleaser
+        code: |
+          curl -sL https://git.io/goreleaser | bash
     
