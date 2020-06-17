@@ -4,17 +4,31 @@
 
 Pick out a subset of Kube config contexts
 
+## Build and Install
+
+```console
+go install
+```
+
 ## Usage
+
+### Run
+
+```console
+kubeconfig-picker
+```
+
+### Import
 
 ```
 import (
     "fmt"
 
-    konfig "github.com/fenrirunbound/kubeconfig-picker"
+    konfig "github.com/fenrirunbound/kubeconfig-picker/konfig"
 )
 
 func main() {
-    k, _ := konfig.NewKonfig("/home/me/.kube/config")
+    k, _ := konfig.NewKonfigFromFile("/home/me/.kube/config")
     
     availableContexts := k.ListContexts()
     // A list of contexts contained in the kube config
